@@ -7,16 +7,19 @@ from bs4 import BeautifulSoup
 # Add headings, time lag, bot, title, .etc later
 
 def gamelog_table_scraping(BRefID, Position_Type):
+    headers = {
+        'content-type': 'text/html; charset=UTF-8',
+        'user-agent': 'Mozilla/5.0'
+    }
+
     year = 2021
-    br_player_page_url = f'https://www.baseball-reference.com/players/gl.fcgi?id={BRefID}&t=b&year={year}'
-    br_player_page= rq.get(br_player_page_url)
+    br_player_page_url = f'https://www.baseball-reference.com/players/gl.fcgi?id={BRefID}&t={Position_Type}&year={year}'
+    br_player_page = rq.get(br_player_page_url, headers=headers)
     player_soup = BeautifulSoup(br_player_page.text, "html.parser")
 
     if Position_Type == "B":
         id = "batting_gamelogs"
         categories = ["Date", "Tm", "Opp", "PA", "AB", "R", "H", "2B", "3B", "HR", "HBP", "RBI", "BB", "SO", "SB"]
-
-
     else:
         id = "pitching_gamelogs"
         categories = ["Date", "Tm", "Opp", "Dec", "IP", "H", "R", "ER", "BB", "SO", "HR", "HBP"]
